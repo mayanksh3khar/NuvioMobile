@@ -41,6 +41,7 @@ import com.nuvio.app.core.ui.NuvioTokens
 import com.nuvio.app.core.ui.ThemeColors
 import com.nuvio.app.core.ui.accentBrush
 import com.nuvio.app.core.ui.labelRes
+import com.nuvio.app.core.ui.rememberThemePalette
 import com.nuvio.app.core.ui.nuvio
 import com.nuvio.app.features.membership.MemberAccessRepository
 import com.nuvio.app.features.membership.availableAppThemes
@@ -120,7 +121,7 @@ private fun ThemeChip(
     modifier: Modifier = Modifier,
 ) {
     val tokens = MaterialTheme.nuvio
-    val palette = remember(theme, customColors) { ThemeColors.getColorPalette(theme, customColors) }
+    val palette = rememberThemePalette(theme, customColors)
     Column(
         modifier = modifier
             .clip(tokens.shapes.compactCard)

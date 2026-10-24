@@ -1,6 +1,8 @@
 package com.nuvio.app.core.ui
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 data class ThemeColorPalette(
     val secondary: Color,
@@ -94,6 +96,42 @@ object ThemeColors {
         backgroundCard = Color(0xFF20242A),
     )
 
+    /** Static fallback for Material (used when the platform has no dynamic colors). */
+    val Material = ThemeColorPalette(
+        secondary = Color(0xFFD0BCFF),
+        secondaryVariant = Color(0xFFCCC2DC),
+        nativeAccentHex = "#D0BCFF",
+        onSecondary = Color(0xFF381E72),
+        onSecondaryVariant = Color(0xFF332D41),
+        focusRing = Color(0xFFD0BCFF),
+        focusBackground = Color(0xFF4F378B),
+        background = Color(0xFF141218),
+        backgroundElevated = Color(0xFF211F26),
+        backgroundCard = Color(0xFF2B2930),
+    )
+
+    fun materialYouPalette(scheme: ColorScheme): ThemeColorPalette {
+        val accent = scheme.primary
+        return ThemeColorPalette(
+            secondary = accent,
+            secondaryVariant = scheme.secondary,
+            nativeAccentHex = accent.toHex(),
+            onSecondary = scheme.onPrimary,
+            onSecondaryVariant = scheme.onSecondary,
+            focusRing = accent,
+            focusBackground = scheme.primaryContainer,
+            background = scheme.surface,
+            backgroundElevated = scheme.surfaceContainer,
+            backgroundCard = scheme.surfaceContainerHigh,
+        )
+    }
+
+    private fun Color.toHex(): String {
+        val argb = toArgb()
+        val rgb = argb and 0xFFFFFF
+        return "#" + rgb.toString(16).padStart(6, '0').uppercase()
+    }
+
     val Crimson = ThemeColorPalette(
         secondary = Color(0xFFE53935),
         secondaryVariant = Color(0xFFC62828),
@@ -178,6 +216,7 @@ object ThemeColors {
         customColors: CustomThemeColors = CustomThemeColors.Default,
     ): ThemeColorPalette = when (theme) {
         AppTheme.CUSTOM -> customColors.toColorPalette()
+        AppTheme.MATERIAL -> Material
         AppTheme.GOLD -> Gold
         AppTheme.JADE -> Jade
         AppTheme.ROSE_GOLD -> RoseGold

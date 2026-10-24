@@ -193,6 +193,21 @@ private val NuvioRippleConfiguration = RippleConfiguration(
 )
 
 @Composable
+fun rememberThemePalette(
+    appTheme: AppTheme,
+    customThemeColors: CustomThemeColors = CustomThemeColors.Default,
+): ThemeColorPalette {
+    val dynamicScheme = if (appTheme == AppTheme.MATERIAL) platformDynamicColorScheme() else null
+    return remember(appTheme, customThemeColors, dynamicScheme) {
+        if (dynamicScheme != null) {
+            ThemeColors.materialYouPalette(dynamicScheme)
+        } else {
+            ThemeColors.getColorPalette(appTheme, customThemeColors)
+        }
+    }
+}
+
+@Composable
 fun NuvioTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     appTheme: AppTheme = AppTheme.WHITE,
@@ -200,9 +215,7 @@ fun NuvioTheme(
     customThemeColors: CustomThemeColors = CustomThemeColors.Default,
     content: @Composable () -> Unit,
 ) {
-    val palette = remember(appTheme, customThemeColors) {
-        ThemeColors.getColorPalette(appTheme, customThemeColors)
-    }
+    val palette = rememberThemePalette(appTheme, customThemeColors)
     val colorScheme = buildColorScheme(palette, amoled = amoled)
     val tokens = defaultNuvioThemeTokens(palette, amoled = amoled, colorScheme = colorScheme)
 
